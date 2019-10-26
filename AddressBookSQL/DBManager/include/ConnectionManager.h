@@ -4,6 +4,7 @@
 #include <string>
 #include "dbtypes.h"
 #include <QString>
+#include <QSqlDatabase>
 
 
 // use of deep pointer:

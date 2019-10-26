@@ -26,7 +26,24 @@ namespace db
 
     bool ConnectionManager::ConnectionManagerPrivate::setUp()
     {
-        const QString driver {"QSQLLITE"};
+        static const QString driver {"QSQLLITE"};
+
+        if (!QSqlDatabase::isDriverAvailable(driver))
+        {
+            state = DBState::ERROR_NO_DRIVER;
+            qCritical() << "Driver" << driver << "not available";
+            return false;
+        }
+        if (!setUpWorkSpace())
+        {
+            state = DBState::ERROR_WORKSPACE;
+            qCritical() << "Workspace setup failed";
+        }
+    }
+
+    bool ConnectionManager::ConnectionManagerPrivate::setUpWorkSpace()
+    {
+        1:18:17
     }
 
 }
