@@ -7,6 +7,8 @@ CONFIG += c++11
 #/* using as lib */
 TEMPLATE = lib
 #path to place binary or library
+
+DEFINES += BUILD_TESTS
 DESTDIR = $$PWD/../shared/lib
 
 INCLUDEPATH += $$PWD/include

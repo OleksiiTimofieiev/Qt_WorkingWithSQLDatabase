@@ -1,4 +1,5 @@
 #include "ConnectionManager.h"
+#include <iostream>
 
 namespace db
 {
@@ -38,12 +39,35 @@ namespace db
         {
             state = DBState::ERROR_WORKSPACE;
             qCritical() << "Workspace setup failed";
+            return false;
         }
-    }
+        //1:26:36
+    };
 
     bool ConnectionManager::ConnectionManagerPrivate::setUpWorkSpace()
     {
-        1:18:17
+#ifdef BUILD_TESTS
+        static const QString dataBaseName{"TestDB"};
+#else
+        static const QString dataBaseName{"ContactsDB"};
+#endif
+        const QString location{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)};
+        const QString fullPath {location + "/" + dataBaseName}; //+.db
+
+        dbPath = fullPath.toStdString();
+
+        QDir dbDirectory {location};
+
+        if (!dbDirectory.exists())
+        {
+            const bool creationResult {dbDirectory.mkpath(location)};
+
+            qInfo() << "DB directory does not exists" << creationResult;
+        }
+
+        qDebug() << "data path" << fullPath;
+
+        return dbDirectory.exists();
     }
 
 }

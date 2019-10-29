@@ -5,6 +5,9 @@
 #include "dbtypes.h"
 #include <QString>
 #include <QSqlDatabase>
+#include <QStandardPaths>
+#include <QDir>
+#include <QDebug>
 
 
 // use of deep pointer:
