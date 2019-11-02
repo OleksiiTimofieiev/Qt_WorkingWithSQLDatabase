@@ -8,6 +8,7 @@ import ContactsModule.Impl 1.0
 // https://github.com/smay1613/ITEA-Advanced/tree/master/Lesson7%20(Qt%20MVC)
 // working with layers Qt
 // small string optimization
+// 1:47:18
 
 Window {
     visible: true
