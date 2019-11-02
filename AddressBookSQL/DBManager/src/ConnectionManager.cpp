@@ -3,9 +3,24 @@
 
 namespace db
 {
+
+namespace
+{
+    class DBCloser
+    {
+        public:
+            void operator()(QSqlDatabase * db)
+            {
+                db->close();
+                QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
+                delete db;
+            }
+    };
+}
     struct ConnectionManager::ConnectionManagerPrivate
     {
-        std::string dbPath;
+        std::unique_ptr<QSqlDatabase, DBCloser> database;
+        QString dbPath;
         bool isValid{true};
         DBState state {DBState::OK};
 
@@ -13,6 +28,10 @@ namespace db
         bool setUpWorkSpace(void);
         bool setUpTables(void);
     };
+
+    ConnectionManager::~ConnectionManager()
+    {
+    }
 
     ConnectionManager & ConnectionManager::instance()
     {
@@ -23,6 +42,9 @@ namespace db
     ConnectionManager::ConnectionManager()
         : m_d {new ConnectionManagerPrivate{} }
     {
+        const bool setupResult{m_d->setUp()};
+
+        m_d->isValid = setupResult;
     }
 
     bool ConnectionManager::ConnectionManagerPrivate::setUp()
@@ -41,7 +63,19 @@ namespace db
             qCritical() << "Workspace setup failed";
             return false;
         }
-        //1:26:36
+        database.reset(new QSqlDatabase {QSqlDatabase::addDatabase(driver)}) ;
+        database->setDatabaseName(dbPath);
+
+        qDebug() << "Database name: " <<database->databaseName();
+
+        if(!database->open())
+        {
+            state = DBState::ERROR_OPENING;
+            qCritical() << "Error i opening DB" << database->databaseName()
+                        << "reason" << database->lastError();
+            return false;
+        }
+        return setUpTables();
     };
 
     bool ConnectionManager::ConnectionManagerPrivate::setUpWorkSpace()
@@ -54,7 +88,7 @@ namespace db
         const QString location{QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)};
         const QString fullPath {location + "/" + dataBaseName}; //+.db
 
-        dbPath = fullPath.toStdString();
+        dbPath = fullPath;
 
         QDir dbDirectory {location};
 
@@ -68,6 +102,39 @@ namespace db
         qDebug() << "data path" << fullPath;
 
         return dbDirectory.exists();
+    }
+
+    bool ConnectionManager::ConnectionManagerPrivate::setUpTables()
+    {
+        bool result{true};
+
+        std::vector<QSqlQuery> creationQuaries {
+            QSqlQuery  {
+                "CREATE TABLE IF NOT EXISTS Contacts"
+                "("
+                "Name TEXT,"
+                "Surname TEXT"
+                "PhoneNumber Text"
+                "UNIQUE(Name,Surname)"
+                ")"
+            }
+        };
+
+        for (auto & query : creationQuaries)
+        {
+            if (query.exec())
+            {
+                result = false;
+                state = DBState::ERROR_TABLES;
+                qDebug() << "Table creation failed:" << query.lastError() << query.result();
+            }
+            else
+            {
+                qInfo() << "Table successfully created";
+            }
+        }
+        return  result;
+
     }
 
 }

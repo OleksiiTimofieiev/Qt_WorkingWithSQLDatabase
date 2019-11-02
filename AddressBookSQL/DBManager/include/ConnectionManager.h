@@ -8,6 +8,8 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QDebug>
+#include <QSqlError>>
+#include <QSqlQuery>
 
 
 // use of deep pointer:
@@ -20,6 +22,7 @@ class ConnectionManager
 //        Q_DISABLE_COPY(ConnectionManager);
         ConnectionManager(const ConnectionManager&) = delete;
         ConnectionManager & operator=(const ConnectionManager&) = delete;
+        ~ConnectionManager();
 
         static ConnectionManager & instance();
 
