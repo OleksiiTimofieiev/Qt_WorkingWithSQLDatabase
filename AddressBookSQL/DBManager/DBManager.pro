@@ -16,10 +16,12 @@ INCLUDEPATH += $$PWD/include
 HEADERS += \
     include/ConnectionManager.h \
     include/Executor.h \
+    include/Processor.h \
     include/Selector.h \
     include/dbtypes.h
 
 SOURCES += \
     src/ConnectionManager.cpp \
     src/Executor.cpp \
+    src/Processor.cpp \
     src/Selector.cpp

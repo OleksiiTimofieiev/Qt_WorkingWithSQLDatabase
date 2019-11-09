@@ -18,6 +18,7 @@ namespace db
         {
             returnData.clear();
             returnData.reserve(resultQuery.size());
+            // iterate over each row;
             while (resultQuery.next())
             {
                 const QSqlRecord & entryRecord {resultQuery.record()};
@@ -28,7 +29,6 @@ namespace db
                 {
                     entryData.push_back(entryRecord.value(i));
                 }
-
                 returnData.push_back(std::move(entryData))
 ;            }
         }

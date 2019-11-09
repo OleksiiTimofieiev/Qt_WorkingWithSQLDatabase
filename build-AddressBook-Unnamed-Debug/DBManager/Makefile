@@ -52,9 +52,11 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../../AddressBookSQL/DBManager/src/ConnectionManager.cpp \
 		../../AddressBookSQL/DBManager/src/Executor.cpp \
+		../../AddressBookSQL/DBManager/src/Processor.cpp \
 		../../AddressBookSQL/DBManager/src/Selector.cpp 
 OBJECTS       = ConnectionManager.o \
 		Executor.o \
+		Processor.o \
 		Selector.o
 DIST          = ../../../../QtInstall/5.10.0/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../QtInstall/5.10.0/clang_64/mkspecs/qdevice.pri \
@@ -219,9 +221,11 @@ DIST          = ../../../../QtInstall/5.10.0/clang_64/mkspecs/features/spec_pre.
 		../../../../QtInstall/5.10.0/clang_64/mkspecs/features/lex.prf \
 		../../AddressBookSQL/DBManager/DBManager.pro ../../AddressBookSQL/DBManager/include/ConnectionManager.h \
 		../../AddressBookSQL/DBManager/include/Executor.h \
+		../../AddressBookSQL/DBManager/include/Processor.h \
 		../../AddressBookSQL/DBManager/include/Selector.h \
 		../../AddressBookSQL/DBManager/include/dbtypes.h ../../AddressBookSQL/DBManager/src/ConnectionManager.cpp \
 		../../AddressBookSQL/DBManager/src/Executor.cpp \
+		../../AddressBookSQL/DBManager/src/Processor.cpp \
 		../../AddressBookSQL/DBManager/src/Selector.cpp
 QMAKE_TARGET  = DBManager
 DESTDIR       = ../../AddressBookSQL/shared/lib/
@@ -610,8 +614,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../QtInstall/5.10.0/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../../AddressBookSQL/DBManager/include/ConnectionManager.h ../../AddressBookSQL/DBManager/include/Executor.h ../../AddressBookSQL/DBManager/include/Selector.h ../../AddressBookSQL/DBManager/include/dbtypes.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../../AddressBookSQL/DBManager/src/ConnectionManager.cpp ../../AddressBookSQL/DBManager/src/Executor.cpp ../../AddressBookSQL/DBManager/src/Selector.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../../AddressBookSQL/DBManager/include/ConnectionManager.h ../../AddressBookSQL/DBManager/include/Executor.h ../../AddressBookSQL/DBManager/include/Processor.h ../../AddressBookSQL/DBManager/include/Selector.h ../../AddressBookSQL/DBManager/include/dbtypes.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../../AddressBookSQL/DBManager/src/ConnectionManager.cpp ../../AddressBookSQL/DBManager/src/Executor.cpp ../../AddressBookSQL/DBManager/src/Processor.cpp ../../AddressBookSQL/DBManager/src/Selector.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -700,7 +704,31 @@ Executor.o: ../../AddressBookSQL/DBManager/src/Executor.cpp ../../AddressBookSQL
 		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/qvariant.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Executor.o ../../AddressBookSQL/DBManager/src/Executor.cpp
 
-Selector.o: ../../AddressBookSQL/DBManager/src/Selector.cpp 
+Processor.o: ../../AddressBookSQL/DBManager/src/Processor.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Processor.o ../../AddressBookSQL/DBManager/src/Processor.cpp
+
+Selector.o: ../../AddressBookSQL/DBManager/src/Selector.cpp ../../AddressBookSQL/DBManager/include/Selector.h \
+		../../AddressBookSQL/DBManager/include/dbtypes.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/QString \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/QVariantList \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/qvariant.h \
+		../../AddressBookSQL/DBManager/include/Executor.h \
+		../../AddressBookSQL/DBManager/include/ConnectionManager.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/QSqlDatabase \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/qsqldatabase.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/QStandardPaths \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/qstandardpaths.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/QDir \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/qdir.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/QDebug \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/QSqlError \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/qsqlerror.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/QSqlQuery \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/qsqlquery.h \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/QSqlRecord \
+		../../../../QtInstall/5.10.0/clang_64/lib/QtSql.framework/Headers/qsqlrecord.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Selector.o ../../AddressBookSQL/DBManager/src/Selector.cpp
 
 ####### Install
