@@ -37,6 +37,11 @@ namespace
     {
         static ConnectionManager instance;
         return instance;
+    }
+
+    bool ConnectionManager::isValid() const
+    {
+        return m_d->isValid;
     };
 
     ConnectionManager::ConnectionManager()

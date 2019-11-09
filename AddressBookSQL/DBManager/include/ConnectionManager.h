@@ -25,6 +25,7 @@ class ConnectionManager
         ~ConnectionManager();
 
         static ConnectionManager & instance();
+        bool isValid() const ;
 
     private:
         ConnectionManager();
